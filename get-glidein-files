@@ -1,5 +1,19 @@
 #!/bin/sh
+#
+# Download the glidein files we need to create pilot jobs and
+# put them in subdirectories of /var/spool/dune-vpf/glidein
+#
 
+rm -Rf /var/spool/dune-vpf/glidein
+
+mkdir -p /var/spool/dune-vpf/glidein/scripts
+
+curl https://raw.githubusercontent.com/glideinWMS/glideinwms/master/tools/manual_glidein_startup \
+  > /var/spool/dune-vpf/glidein/scripts/manual_glidein_startup
+
+curl https://raw.githubusercontent.com/glideinWMS/glideinwms/master/creation/web_base/glidein_startup.sh \
+  > /var/spool/dune-vpf/glidein/scripts/glidein_startup.sh
+  
 (
 
 cat <<EOF
@@ -15,7 +29,6 @@ while read path base_url random_code
 do
 
   description_file=description.$random_code.cfg
-  rm -Rf /var/spool/dune-vpf/glidein/$path
   mkdir -p /var/spool/dune-vpf/glidein/$path
   cd /var/spool/dune-vpf/glidein/$path
 
@@ -34,3 +47,4 @@ do
 done
 
 )
+
