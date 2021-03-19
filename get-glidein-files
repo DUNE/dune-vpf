@@ -1,0 +1,36 @@
+#!/bin/sh
+
+(
+
+cat <<EOF
+web http://gfactory-2.opensciencegrid.org/factory/stage j81aAK
+web/entry_UBoone_T2_UK_Manchester_ce02 http://gfactory-2.opensciencegrid.org/factory/stage/entry_UBoone_T2_UK_Manchester_ce02 j81aAK
+clientweb http://gpfrontend01.fnal.gov:8319/vofrontend/stage j819gN
+clientwebgroup http://gpfrontend01.fnal.gov:8319/vofrontend/stage/group_dune_cern j819gN
+EOF
+
+) | (
+
+while read path base_url random_code
+do
+
+  description_file=description.$random_code.cfg
+  rm -Rf /var/spool/dune-vpf/glidein/$path
+  mkdir -p /var/spool/dune-vpf/glidein/$path
+  cd /var/spool/dune-vpf/glidein/$path
+
+  wget -v $base_url/$description_file
+
+  signature_file=`grep '^signature' $description_file | head -1 | sed 's/^signature[[:space:]]*//'`
+
+  wget -v $base_url/$signature_file
+
+  grep -v '^#' $signature_file | (
+                                   while read sig filename
+                                   do
+                                     wget -v $base_url/$filename
+                                   done
+                                 )
+done
+
+)
