@@ -3,6 +3,9 @@
 # Download the glidein files we need to create pilot jobs and
 # put them in subdirectories of /var/spool/dune-vpf/glidein
 #
+# This is only needed for creating extra entries or making
+# local modifications of them
+#
 
 rm -Rf /var/spool/dune-vpf/glidein
 
@@ -13,6 +16,8 @@ curl https://raw.githubusercontent.com/glideinWMS/glideinwms/master/tools/manual
 
 curl https://raw.githubusercontent.com/glideinWMS/glideinwms/master/creation/web_base/glidein_startup.sh \
   > /var/spool/dune-vpf/glidein/scripts/glidein_startup.sh
+
+chmod +x /var/spool/dune-vpf/glidein/scripts/*
   
 (
 

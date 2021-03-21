@@ -12,12 +12,10 @@ REQ_NAME=UBoone_T2_UK_Manchester_ce01@gfactory_instance@OSG
   --client-name=$CLIENT_NAME \
   --req-name=$REQ_NAME \
   --cmd-out-file=glidein_startup_wrapper \
-  --glidein-startup=$PWD/glidein_startup.sh
+  --glidein-startup=./glidein_startup.sh 
 
-export X509_USER_PROXY=$PWD/vomsproxy.pem
+cat <<EOF >vpf.xrsl
+&( executable = "vpf_pilot" )( jobname = "vpf_test" )( stdout = "stdout" )( join = "yes" )( gmlog = "gmlog" )(inputFiles = ("glidein_startup_wrapper" "")("vpf_pilot" "")("user.proxy" "")("glidein_startup.sh" ""))
+EOF
 
-export JOB_ID=1234
-export QUEUE=test
-
-./glidein_startup_wrapper < /dev/null >glidein_startup_wrapper.stdout 2>glidein_startup_wrapper.stderr
-
+arcsub --cluster=ce01.tier2.hep.manchester.ac.uk vpf.xrsl 

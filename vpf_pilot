@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# For testing: VPF will create this file on the fly in future
+#
+
+printenv
+export X509_USER_PROXY=$PWD/user.proxy
+
+chmod +x glidein_startup_wrapper glidein_startup.sh
+
+./glidein_startup_wrapper < /dev/null 
+
